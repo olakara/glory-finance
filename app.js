@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const debug = require('debug')('finance:app');
 const morgan = require('morgan');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const HOST = process.env.HOST || '0.0.0.0';
 
 const app = express();
