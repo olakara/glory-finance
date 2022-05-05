@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set DEBUG=finance:app & node app.js",
+    "start": "set DEBUG=app:finance & node app.js",
     "debug": "set DEBUG=* & nodemon app.js"
   },
   "keywords": [],
@@ -21,7 +21,7 @@
     "restartable": "rs",
     "delay": 2500,
     "env": {
-      "PORT": 4000,
+      "PORT": 80,
       "HOST": "0.0.0.0"
     }
   }
