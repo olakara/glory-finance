@@ -17,4 +17,6 @@ model Expenses {
     title  String @db.VarChar(255)
     amount Decimal @db.Money
     expenseDate DateTime
+    status String @db.VarChar(255)
+    actionBy String @db.VarChar(255)
 }

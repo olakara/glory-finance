@@ -7,53 +7,65 @@ const { PrismaClient } = require('@prisma/client');
 
 async function approveExpense(id) {
 
+    const prisma = new PrismaClient();
 
     try {
 
-        // TODO : Get the expense from the DB
-        const expense = {};
+        const idAsInt = parseInt(id);
+        await prisma.expenses.update({
+            where: {
+                id: idAsInt,
+            },
+            data: {
+                "status": 'APPROVED',
+                "actionBy": "SYSTEM"
+            }
+        });
 
-        await db.collection('expenses').updateOne({ "_id": ObjectId(id) },
-            {
-                $set: {
-                    "status": 'APPROVED',
-                    "actionBy": "SYSTEM"
-                }
-            });
+        // const notifcationForInitiator = {
+        //     expenseReferenceId: ObjectId(id),
+        //     message: `Your expense request (${expense.title}) was approved by finance`,
+        //     createDate: new Date().toISOString()
+        // }
 
-        const notifcationForInitiator = {
-            expenseReferenceId: ObjectId(id),
-            message: `Your expense request (${expense.title}) was approved by finance`,
-            createDate: new Date().toISOString()
-        }
-
-        await sendNotification(notifcationForInitiator);
-
+        // await sendNotification(notifcationForInitiator);
 
     } catch (error) {
         debug(error.stack);
     }
+    await prisma.$disconnect()
 }
 
 async function rejectExpense(id) {
 
 
+    const prisma = new PrismaClient();
+
     try {
 
-        // TODO : Get the expense from the DB
+        const idAsInt = parseInt(id);
+        await prisma.expenses.update({
+            where: {
+                id: idAsInt,
+            },
+            data: {
+                "status": 'REJECTED',
+                "actionBy": "SYSTEM"
+            }
+        });
 
-        const notifcationForInitiator = {
-            expenseReferenceId: ObjectId(id),
-            message: `Your expense request (${expense.title}) was rejected by finance`,
-            createDate: new Date().toISOString()
-        }
+        // const notifcationForInitiator = {
+        //     expenseReferenceId: ObjectId(id),
+        //     message: `Your expense request (${expense.title}) was rejected by finance`,
+        //     createDate: new Date().toISOString()
+        // }
 
-        await sendNotification(notifcationForInitiator);
+        // await sendNotification(notifcationForInitiator);
 
     } catch (error) {
         debug(error.stack);
     }
-    client.close();
+    await prisma.$disconnect();
 
 }
 
