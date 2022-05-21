@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  finance:
+    container_name: finance
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: olakara/finance
+    ports:
+      - "4000:80"
+    depends_on:
+      - finance-db
+  finance-db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: puser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: finance
+    volumes:
+      - ../postgres-volumne:/var/lib/postgresql/data

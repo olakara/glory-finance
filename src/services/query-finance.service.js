@@ -1,57 +1,32 @@
 const express = require('express');
 const debug = require('debug')('app:finance:query-service');
-const { getDbContext } = require('../shared/db.service');
-const { ObjectId } = require('mongodb');
+const { PrismaClient } = require('@prisma/client');
+
 
 
 async function getAllExpenses() {
 
-
-    const [db, client] = await getDbContext();
-    try {
-
-        const expenses = await db.collection('expenses').find({ isDeleted: false }).toArray();
-
-        const result = expenses.map((x) => {
-            return {
-                id: x._id,
-                title: x.title,
-                amount: x.amount,
-                date: x.date,
-                status: x.status
-            }
-        });
-
-        return result;
-
-    } catch (error) {
-        debug(error.stack);
-    }
-    client.close();
+    const prisma = new PrismaClient();
+    const allExpenses = await prisma.expenses.findMany();
+    console.log(allExpenses);
+    await prisma.$disconnect()
+    return allExpenses;
 }
 
 async function getExpenseById(id) {
 
-    const [db, client] = await getDbContext();
+    const idAsInt = parseInt(id);
+    const prisma = new PrismaClient();
+    const expense = await prisma.expenses.findUnique({
+        where: {
+            id: idAsInt,
+        }
+    });
 
-    try {
+    console.log(expense);
+    await prisma.$disconnect()
+    return expense;
 
-        const expense = await db.collection('expenses').findOne({ _id: ObjectId(id) });
-
-        const result = {
-            id: expense._id,
-            title: expense.title,
-            amount: expense.amount,
-            date: expense.date,
-            status: expense.status
-        };
-
-        return result;
-
-    } catch (error) {
-        debug(error.stack);
-    }
-    client.close();
 }
 
 

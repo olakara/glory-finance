@@ -3,11 +3,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+
 model Expenses {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    refernceId  String @db.VarChar(255)
+    refId  String @db.VarChar(255)
     title  String @db.VarChar(255)
-    date DateTime
+    amount Decimal @db.Money
+    expenseDate DateTime
 }

@@ -9,12 +9,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install
+RUN npx prisma generate
 # If you are building your code for production
 RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
 
-EXPOSE 4000
+EXPOSE 80
 
 CMD [ "node", "app.js" ]
